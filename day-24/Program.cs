@@ -366,81 +366,81 @@ namespace day_24
          });
          #endregion
 
-         immuneSystem = new List<GroupInfo>();
-         infection = new List<GroupInfo>();
+         //immuneSystem = new List<GroupInfo>();
+         //infection = new List<GroupInfo>();
 
 
-         immuneSystem.Add(new GroupInfo()
-         {
-            Index = 1,
-            Units = 17,
-            HitPoints = 5390,
-            Immunities = new HashSet<string>()
-            {
-            },
-            Weaknesses = new HashSet<string>()
-            {
-               "bludgeoning",
-               "radiation"
-            },
-            AttackDamage = 4507,
-            AttackType = "fire",
-            Initiative = 2
-         });
-         immuneSystem.Add(new GroupInfo()
-         {
-            Index=2,
-            Units = 989,
-            HitPoints = 1274,
-            Immunities = new HashSet<string>()
-            {
-               "fire"
-            },
-            Weaknesses = new HashSet<string>()
-            {
-               "bludgeoning",
-               "slashing"
-            },
-            AttackDamage = 25,
-            AttackType = "slashing",
-            Initiative = 3
-         });
+         //immuneSystem.Add(new GroupInfo()
+         //{
+         //   Index = 1,
+         //   Units = 17,
+         //   HitPoints = 5390,
+         //   Immunities = new HashSet<string>()
+         //   {
+         //   },
+         //   Weaknesses = new HashSet<string>()
+         //   {
+         //      "bludgeoning",
+         //      "radiation"
+         //   },
+         //   AttackDamage = 4507,
+         //   AttackType = "fire",
+         //   Initiative = 2
+         //});
+         //immuneSystem.Add(new GroupInfo()
+         //{
+         //   Index=2,
+         //   Units = 989,
+         //   HitPoints = 1274,
+         //   Immunities = new HashSet<string>()
+         //   {
+         //      "fire"
+         //   },
+         //   Weaknesses = new HashSet<string>()
+         //   {
+         //      "bludgeoning",
+         //      "slashing"
+         //   },
+         //   AttackDamage = 25,
+         //   AttackType = "slashing",
+         //   Initiative = 3
+         //});
 
 
-         infection.Add(new GroupInfo()
-         {
-            Index=1,
-            Units = 801,
-            HitPoints = 4706,
-            Immunities = new HashSet<string>()
-            {
-            },
-            Weaknesses = new HashSet<string>()
-            {
-               "radiation"
-            },
-            AttackDamage = 116,
-            AttackType = "bludgeoning",
-            Initiative = 1
-         });
-         infection.Add(new GroupInfo()
-         {
-            Index=2,
-            Units = 4485,
-            HitPoints = 2961,
-            Immunities = new HashSet<string>()
-            {
-               "radiation"
-            },
-            Weaknesses = new HashSet<string>()
-            {
-               "fire",
-               "cold"
-            },
-            AttackDamage = 12,
-            AttackType = "slashing",
-            Initiative = 4
-         });
+         //infection.Add(new GroupInfo()
+         //{
+         //   Index=1,
+         //   Units = 801,
+         //   HitPoints = 4706,
+         //   Immunities = new HashSet<string>()
+         //   {
+         //   },
+         //   Weaknesses = new HashSet<string>()
+         //   {
+         //      "radiation"
+         //   },
+         //   AttackDamage = 116,
+         //   AttackType = "bludgeoning",
+         //   Initiative = 1
+         //});
+         //infection.Add(new GroupInfo()
+         //{
+         //   Index=2,
+         //   Units = 4485,
+         //   HitPoints = 2961,
+         //   Immunities = new HashSet<string>()
+         //   {
+         //      "radiation"
+         //   },
+         //   Weaknesses = new HashSet<string>()
+         //   {
+         //      "fire",
+         //      "cold"
+         //   },
+         //   AttackDamage = 12,
+         //   AttackType = "slashing",
+         //   Initiative = 4
+         //});
 
          // fight
          while (immuneSystem.Count > 0 && infection.Count > 0)
@@ -450,7 +450,7 @@ namespace day_24
             HashSet<GroupInfo> targetsImmune = new HashSet<GroupInfo>();
             foreach (GroupInfo attackerImmune in immuneSystem.OrderByDescending(p => p.EffectivePower).ThenByDescending(p => p.Initiative))
             {
-               GroupInfo targetImmune = infection.Where(p => !targetsImmune.Contains(p)).OrderByDescending(p => CalcDamage(attackerImmune, p)).ThenByDescending(p => p.EffectivePower).ThenByDescending(p => p.Initiative).FirstOrDefault();
+               GroupInfo targetImmune = infection.Where(p => !targetsImmune.Contains(p) && CalcDamage(attackerImmune, p) > 0).OrderByDescending(p => CalcDamage(attackerImmune, p)).ThenByDescending(p => p.EffectivePower).ThenByDescending(p => p.Initiative).FirstOrDefault();
 
                if (targetImmune != null)
                {
@@ -463,7 +463,7 @@ namespace day_24
             HashSet<GroupInfo> targetsInfection = new HashSet<GroupInfo>();
             foreach (GroupInfo attackerInfection in infection.OrderByDescending(p => p.EffectivePower).ThenByDescending(p => p.Initiative))
             {
-               GroupInfo targetInfection = immuneSystem.Where(p => !targetsInfection.Contains(p)).OrderByDescending(p => CalcDamage(attackerInfection, p)).ThenByDescending(p => p.EffectivePower).ThenByDescending(p => p.Initiative).FirstOrDefault();
+               GroupInfo targetInfection = immuneSystem.Where(p => !targetsInfection.Contains(p) && CalcDamage(attackerInfection, p) > 0).OrderByDescending(p => CalcDamage(attackerInfection, p)).ThenByDescending(p => p.EffectivePower).ThenByDescending(p => p.Initiative).FirstOrDefault();
 
                if (targetInfection != null)
                {
@@ -481,7 +481,7 @@ namespace day_24
 
                defender.Units = defender.Units - killedUnits;
 
-               Console.WriteLine(defender.Units);
+               //Console.WriteLine(defender.Units);
             }
 
             immuneSystem.RemoveAll(p => p.Units <= 0);
